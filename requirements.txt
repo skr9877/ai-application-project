@@ -3,3 +3,5 @@ uvicorn
 websockets
 jinja2
 python-multipart
+huggingface_hub
+llama-cpp-python

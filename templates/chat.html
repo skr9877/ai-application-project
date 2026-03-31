@@ -8,8 +8,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
+            font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #eef2ff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,125 +18,217 @@
 
         .chat-container {
             width: 420px;
-            height: 620px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            height: 640px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 40px rgba(79,70,229,0.15);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         .chat-header {
-            background: #4f46e5;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
-            padding: 16px 20px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .chat-header span {
+        .chat-header .avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .chat-header .info .name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .chat-header .info .status {
             font-size: 12px;
-            opacity: 0.8;
-            display: block;
+            opacity: 0.75;
             margin-top: 2px;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            background: #f8f9ff;
         }
 
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 12px;
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #d0d5f7; border-radius: 4px; }
+
+        .msg-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .msg-row.user { justify-content: flex-end; }
+        .msg-row.ai { justify-content: flex-start; }
+
+        .msg-row.ai .bubble-avatar {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 14px;
-            line-height: 1.5;
+            flex-shrink: 0;
+        }
+
+        .bubble {
+            max-width: 72%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.55;
             word-break: break-word;
         }
 
-        .message.user {
-            align-self: flex-end;
-            background: #4f46e5;
+        .msg-row.user .bubble {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
             border-bottom-right-radius: 4px;
         }
 
-        .message.ai {
-            align-self: flex-start;
-            background: #f1f1f1;
-            color: #333;
+        .msg-row.ai .bubble {
+            background: white;
+            color: #1e1e2e;
             border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
 
-        .message.system {
-            align-self: center;
-            background: transparent;
-            color: #999;
+        .msg-time {
+            font-size: 10px;
+            color: #aaa;
+            margin-bottom: 2px;
+            flex-shrink: 0;
+        }
+
+        .system-msg {
+            text-align: center;
             font-size: 12px;
+            color: #aaa;
+            padding: 4px 12px;
+            background: #ececf5;
+            border-radius: 20px;
+            align-self: center;
         }
 
-        .chat-input {
-            display: flex;
-            padding: 12px;
-            border-top: 1px solid #eee;
-            gap: 8px;
-        }
-
-        .chat-input input {
-            flex: 1;
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 4px;
             padding: 10px 14px;
-            border: 1px solid #ddd;
+            background: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 7px;
+            height: 7px;
+            background: #c0bef5;
+            border-radius: 50%;
+            animation: bounce 1.2s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        .chat-input-area {
+            padding: 12px 16px;
+            background: white;
+            border-top: 1px solid #eeeef5;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1.5px solid #e0e0f0;
             border-radius: 24px;
             outline: none;
             font-size: 14px;
+            background: #f8f9ff;
+            transition: border-color 0.2s;
         }
 
-        .chat-input input:focus {
+        .chat-input-area input:focus {
             border-color: #4f46e5;
+            background: white;
         }
 
-        .chat-input button {
-            background: #4f46e5;
-            color: white;
-            border: none;
+        .send-btn {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
             cursor: pointer;
-            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
-        .chat-input button:hover {
-            background: #4338ca;
-        }
+        .send-btn:hover { opacity: 0.9; transform: scale(1.05); }
+        .send-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
-        .chat-input button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+        .send-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            AI 상담원
-            <span>무엇이든 물어보세요</span>
+            <div class="avatar">🐧</div>
+            <div class="info">
+                <div class="name">AI 상담원</div>
+                <div class="status" id="statusText">연결 중...</div>
+            </div>
         </div>
+
         <div class="chat-messages" id="messages">
-            <div class="message system">상담을 시작합니다.</div>
+            <div class="system-msg">상담을 시작합니다.</div>
         </div>
-        <div class="chat-input">
-            <input type="text" id="input" placeholder="메시지를 입력하세요..." autocomplete="off" />
-            <button id="sendBtn">&#9658;</button>
+
+        <div class="chat-input-area">
+            <input type="text" id="input" placeholder="메시지를 입력하세요..." autocomplete="off" disabled />
+            <button class="send-btn" id="sendBtn" disabled>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -146,51 +238,112 @@
         const messages = document.getElementById("messages");
         const input = document.getElementById("input");
         const sendBtn = document.getElementById("sendBtn");
+        const statusText = document.getElementById("statusText");
+
+        function getTime() {
+            return new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessage(text, type) {
+            if (type === "system") {
+                const div = document.createElement("div");
+                div.className = "system-msg";
+                div.textContent = text;
+                messages.appendChild(div);
+            } else {
+                const row = document.createElement("div");
+                row.className = `msg-row ${type}`;
+
+                if (type === "ai") {
+                    const avatar = document.createElement("div");
+                    avatar.className = "bubble-avatar";
+                    avatar.textContent = "🤖";
+                    row.appendChild(avatar);
+                }
+
+                const bubble = document.createElement("div");
+                bubble.className = "bubble";
+                bubble.textContent = text;
+
+                const time = document.createElement("div");
+                time.className = "msg-time";
+                time.textContent = getTime();
+
+                if (type === "user") {
+                    row.appendChild(time);
+                    row.appendChild(bubble);
+                } else {
+                    row.appendChild(bubble);
+                    row.appendChild(time);
+                }
+
+                messages.appendChild(row);
+            }
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // 타이핑 인디케이터
+        const typingRow = document.createElement("div");
+        typingRow.className = "msg-row ai";
+        typingRow.id = "typing";
+        const typingAvatar = document.createElement("div");
+        typingAvatar.className = "bubble-avatar";
+        typingAvatar.textContent = "🤖";
+        const typingIndicator = document.createElement("div");
+        typingIndicator.className = "typing-indicator";
+        typingIndicator.innerHTML = "<span></span><span></span><span></span>";
+        typingRow.appendChild(typingAvatar);
+        typingRow.appendChild(typingIndicator);
+
+        function showTyping() {
+            messages.appendChild(typingRow);
+            typingIndicator.style.display = "flex";
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function hideTyping() {
+            typingIndicator.style.display = "none";
+            if (typingRow.parentNode) typingRow.parentNode.removeChild(typingRow);
+        }
 
         ws.onopen = () => {
+            statusText.textContent = "온라인";
+            input.disabled = false;
             sendBtn.disabled = false;
+            input.focus();
         };
 
         ws.onmessage = (e) => {
             const text = e.data;
-            const div = document.createElement("div");
+            hideTyping();
 
-            if (text.startsWith("고객: ")) {
-                div.className = "message user";
-                div.textContent = text.replace("고객: ", "");
+            if (text.startsWith("SYSTEM:")) {
+                addMessage(text.replace("SYSTEM:", ""), "system");
+            } else if (text.startsWith("고객: ")) {
+                addMessage(text.replace("고객: ", ""), "user");
             } else if (text.startsWith("AI: ")) {
-                div.className = "message ai";
-                div.textContent = text.replace("AI: ", "");
-            } else {
-                div.className = "message system";
-                div.textContent = text;
+                addMessage(text.replace("AI: ", ""), "ai");
             }
-
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
         };
 
         ws.onclose = () => {
-            const div = document.createElement("div");
-            div.className = "message system";
-            div.textContent = "연결이 종료되었습니다.";
-            messages.appendChild(div);
+            statusText.textContent = "오프라인";
+            addMessage("연결이 종료되었습니다.", "system");
+            input.disabled = true;
             sendBtn.disabled = true;
         };
 
         function sendMessage() {
             const text = input.value.trim();
-            if (!text) return;
+            if (!text || sendBtn.disabled) return;
             ws.send(text);
             input.value = "";
+            showTyping();
         }
 
         sendBtn.onclick = sendMessage;
-        input.onkeydown = (e) => {
-            if (e.key === "Enter") sendMessage();
-        };
-
-        sendBtn.disabled = true;
+        input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
     </script>
 </body>
 </html>
