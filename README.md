@@ -100,5 +100,5 @@ http://localhost:8000/chat
 - 서버당 최대 동시 접속 100명
 
 ## 사용 이미지
-<img width="919" height="974" alt="image" src="https://github.com/user-attachments/assets/480706d6-683b-4800-ade2-3e2633a6e20d" />
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/480706d6-683b-4800-ade2-3e2633a6e20d" />
 
