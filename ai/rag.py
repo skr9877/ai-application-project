@@ -38,12 +38,13 @@ class VectorStore:
         self.collection.add(documents=[text], embeddings=embedding, ids=[filename])
         return True
 
-    def search(self, query: str, top_k: int = 3) -> list[str]:
+    def search(self, query: str, top_k: int = 3, threshold: float = 0.5) -> list[str]:
         if self.collection.count() == 0:
             return []
         embedding = self.embedder.embed([query])
-        results = self.collection.query(query_embeddings=embedding, n_results=min(top_k, self.collection.count()))
-        return results["documents"][0] if results["documents"] else []
+        results = self.collection.query(query_embeddings=embedding, n_results=min(top_k, self.collection.count()), include=["documents", "distances"])
+        docs, distances = results["documents"][0], results["distances"][0]
+        return [doc for doc, dist in zip(docs, distances) if dist <= threshold]
 
 
 # ── 싱글톤 인스턴스 ───────────────────────────────────────────────
