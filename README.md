@@ -1,4 +1,104 @@
-# ai-application-project
-클로드를 사용한 채팅 어플리케이션 개발
+# AI 채팅 상담 서버
 
-공사중
+FastAPI 기반 AI 상담 채팅 서버입니다. 비즈니스 서버에 스크립트 한 줄만 추가하면 채팅 위젯이 활성화됩니다.
+
+---
+
+## 사용 모델
+
+| 역할 | 모델 | 비고 |
+|------|------|------|
+| 언어 모델 (LLM) | [MLP-KTLim/llama-3-Korean-Bllossom-8B-gguf-Q4_K_M](https://huggingface.co/MLP-KTLim/llama-3-Korean-Bllossom-8B-gguf-Q4_K_M) | 한국어 특화 Llama3 8B, Q4_K_M 양자화 |
+| 임베딩 모델 (RAG) | [jhgan/ko-sroberta-multitask](https://huggingface.co/jhgan/ko-sroberta-multitask) | 한국어 문장 임베딩 |
+| 벡터 DB | ChromaDB | 로컬 퍼시스턴트 저장 |
+
+---
+
+## 프로젝트 구조
+
+```
+ai_application_project/
+├── main.py                  # FastAPI 앱 진입점, 라우터
+├── chat.py                  # WebSocket 세션 관리, 동시접속 제한(100명)
+├── model.py                 # LLM 로드 및 응답 생성
+├── rag.py                   # 임베딩, 벡터 저장/검색 (RAG)
+├── templates/
+│   └── chat.html            # 채팅 UI
+├── static/
+│   └── widget.js            # 비즈니스 서버 삽입용 위젯 스크립트
+├── assets/
+│   ├── models/
+│   │   ├── llama-3-Korean-Bllossom-8B-Q4_K_M.gguf  # LLM 모델 (git 제외)
+│   │   └── ko-sroberta/     # 임베딩 모델 (git 제외)
+│   ├── chroma_db/           # 벡터 DB 저장소 (자동 생성)
+│   └── docs/                # RAG용 원본 문서 보관
+├── test.html                # 위젯 로컬 테스트용
+└── requirements.txt
+```
+
+---
+
+## 설치 및 실행
+
+### 1. 사전 요구사항
+- Python 3.10+
+- CUDA 12.x (GPU 가속 사용 시)
+- NVIDIA GPU (VRAM 8GB 이상 권장)
+
+### 2. 모델 다운로드
+```bash
+# LLM 모델 (약 5GB)
+hf download MLP-KTLim/llama-3-Korean-Bllossom-8B-gguf-Q4_K_M \
+  llama-3-Korean-Bllossom-8B-Q4_K_M.gguf --local-dir ./assets/models
+
+# 임베딩 모델
+hf download jhgan/ko-sroberta-multitask --local-dir ./assets/models/ko-sroberta
+```
+
+### 3. 패키지 설치
+```bash
+python -m venv venv
+./venv/Scripts/activate
+pip install -r requirements.txt
+```
+
+### 4. 서버 실행
+```bash
+uvicorn main:app --reload
+```
+
+---
+
+## 사용 방법
+
+### 채팅 접속
+```
+http://localhost:8000/chat
+```
+
+### 비즈니스 서버에 위젯 삽입
+```html
+<script src="http://채팅서버주소/static/widget.js"></script>
+```
+
+### RAG 문서 추가 (API)
+```bash
+POST http://localhost:8000/admin/documents
+Content-Type: application/json
+
+{
+  "texts": ["문서 내용 1", "문서 내용 2"]
+}
+```
+
+### 저장된 문서 수 확인
+```bash
+GET http://localhost:8000/admin/documents/count
+```
+
+---
+
+## 인프라
+
+- IBM 서버 2대 + L4 로드밸런서
+- 서버당 최대 동시 접속 100명

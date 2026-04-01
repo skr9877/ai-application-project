@@ -7,21 +7,16 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
+        html, body {
             font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
-            background: #eef2ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            height: 100%;
+            overflow: hidden;
         }
 
         .chat-container {
-            width: 420px;
-            height: 640px;
+            width: 100%;
+            height: 100%;
             background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 8px 40px rgba(79,70,229,0.15);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -239,6 +234,11 @@
         const input = document.getElementById("input");
         const sendBtn = document.getElementById("sendBtn");
         const statusText = document.getElementById("statusText");
+
+        // iframe 안에서는 헤더 숨김 (위젯 타이틀바가 대신함)
+        if (window.self !== window.top) {
+            document.querySelector(".chat-header").style.display = "none";
+        }
 
         function getTime() {
             return new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });

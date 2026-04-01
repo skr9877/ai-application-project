@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 
-MODEL_PATH = "./models/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf"
+MODEL_PATH = "./assets/models/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf"
 
 SYSTEM_PROMPT = "당신은 친절한 AI 상담원입니다. 고객의 질문에 한국어로 간결하고 정확하게 답변해주세요."
 
@@ -12,10 +12,14 @@ llm = Llama(
 )
 
 
-async def generate_response(user_message: str) -> str:
+async def generate_response(user_message: str, context: str = "") -> str:
+    system = SYSTEM_PROMPT
+    if context:
+        system += f"\n\n아래 참고 문서를 바탕으로 답변하세요:\n{context}"
+
     response = llm.create_chat_completion(
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": system},
             {"role": "user", "content": user_message},
         ],
         max_tokens=512,
