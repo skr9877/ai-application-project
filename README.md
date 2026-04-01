@@ -25,9 +25,8 @@ ai_application_project/
 │   └── vectorize_docs.py        # docs 벡터화 실행 스크립트
 ├── chatting/
 │   ├── chat.py                  # WebSocket 세션 관리, 동시접속 제한(100명)
-│   ├── templates/
-│   │   └── chat.html            # 채팅 UI
-│   └── static/                  # 정적 파일
+│   └── templates/
+│       └── chat.html            # 채팅 UI
 ├── assets/
 │   ├── models/
 │   │   ├── llama-3-Korean-Bllossom-8B-Q4_K_M.gguf  # LLM 모델 (git 제외)
