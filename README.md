@@ -32,7 +32,9 @@ ai_application_project/
 │   │   ├── llama-3-Korean-Bllossom-8B-Q4_K_M.gguf  # LLM 모델 (git 제외)
 │   │   └── ko-sroberta/         # 임베딩 모델 (git 제외)
 │   ├── chroma_db/               # 벡터 DB 저장소 (자동 생성, git 제외)
-│   └── docs/                    # RAG용 원본 문서 보관
+│   ├── docs/                    # RAG용 원본 문서 보관
+│   └── prompts/
+│       └── system_prompt.txt    # AI 시스템 프롬프트 (수정 가능)
 └── requirements.txt
 ```
 

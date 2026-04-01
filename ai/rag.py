@@ -27,7 +27,10 @@ class VectorStore:
     def __init__(self, embedder: BaseEmbedder, collection_name: str = "documents"):
         self.embedder = embedder
         self.client = chromadb.PersistentClient(path="./assets/chroma_db")
-        self.collection = self.client.get_or_create_collection(collection_name)
+        self.collection = self.client.get_or_create_collection(
+            collection_name,
+            metadata={"hnsw:space": "cosine"}
+        )
 
     def add_file(self, filename: str, text: str) -> bool:
         # 파일명을 ID로 사용 — 이미 있으면 스킵
@@ -38,7 +41,7 @@ class VectorStore:
         self.collection.add(documents=[text], embeddings=embedding, ids=[filename])
         return True
 
-    def search(self, query: str, top_k: int = 3, threshold: float = 0.5) -> list[str]:
+    def search(self, query: str, top_k: int = 3, threshold: float = 0.75) -> list[str]:
         if self.collection.count() == 0:
             return []
         embedding = self.embedder.embed([query])
