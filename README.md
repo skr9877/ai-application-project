@@ -98,3 +98,7 @@ http://localhost:8000/chat
 
 - IBM 서버 2대 + L4 로드밸런서
 - 서버당 최대 동시 접속 100명
+
+## 사용 이미지
+<img width="919" height="974" alt="image" src="https://github.com/user-attachments/assets/480706d6-683b-4800-ade2-3e2633a6e20d" />
+
