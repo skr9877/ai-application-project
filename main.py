@@ -1,15 +1,19 @@
+import sys
 import uuid
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent / "ai"))
+sys.path.insert(0, str(Path(__file__).parent / "chatting"))
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
 from chat import manager, get_ai_response
-from rag import vector_store
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="chatting/static"), name="static")
+templates = Jinja2Templates(directory="chatting/templates")
 
 
 @app.get("/chat", response_class=HTMLResponse)
@@ -19,20 +23,6 @@ async def create_chat(request: Request):
         "session_id": session_id
     })
 
-
-class DocumentRequest(BaseModel):
-    texts: list[str]
-
-
-@app.post("/admin/documents")
-async def add_documents(req: DocumentRequest):
-    vector_store.add_documents(req.texts)
-    return {"added": len(req.texts)}
-
-
-@app.get("/admin/documents/count")
-async def document_count():
-    return {"count": vector_store.collection.count()}
 
 
 @app.websocket("/ws/{session_id}")

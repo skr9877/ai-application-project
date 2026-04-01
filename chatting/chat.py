@@ -31,8 +31,8 @@ class SessionManager:
 
 
 async def get_ai_response(session_id: str, user_message: str) -> str:
-    from model import generate_response
-    from rag import get_context
+    from ai.model import generate_response
+    from ai.rag import get_context
     context = get_context(user_message)
     return await generate_response(user_message, context)
 
