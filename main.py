@@ -8,11 +8,9 @@ sys.path.insert(0, str(Path(__file__).parent / "chatting"))
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 from chat import manager, get_ai_response
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="chatting/static"), name="static")
 templates = Jinja2Templates(directory="chatting/templates")
 
 
