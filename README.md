@@ -20,17 +20,20 @@ FastAPI 기반 AI 상담 채팅 서버입니다.
 ai_application_project/
 ├── main.py                      # FastAPI 앱 진입점
 ├── ai/
-│   ├── model.py                 # LLM 로드 및 응답 생성
-│   ├── rag.py                   # 임베딩, 벡터 저장/검색
-│   └── vectorize_docs.py        # docs 벡터화 실행 스크립트
+│   ├── core/                    # 공유 핵심 모듈 (전처리/서빙 양쪽에서 사용)
+│   │   └── rag.py               # 임베딩, 벡터 저장/검색
+│   ├── preprocess/              # 문서 전처리 및 벡터화
+│   │   └── vectorize_docs.py    # docs 벡터화 실행 스크립트
+│   └── serve/                   # 모델 서빙 (채팅 답변 생성)
+│       └── model.py             # LLM 로드 및 응답 생성
 ├── chatting/
 │   ├── chat.py                  # WebSocket 세션 관리, 동시접속 제한(100명)
 │   └── templates/
 │       └── chat.html            # 채팅 UI
 ├── assets/
-│   ├── models/
-│   │   ├── llama-3-Korean-Bllossom-8B-Q4_K_M.gguf  # LLM 모델 (git 제외)
-│   │   └── ko-sroberta/         # 임베딩 모델 (git 제외)
+│   ├── models/                  # 모델 파일 (git 제외)
+│   │   ├── llama-3-Korean-Bllossom-8B-Q4_K_M.gguf
+│   │   └── ko-sroberta/
 │   ├── chroma_db/               # 벡터 DB 저장소 (자동 생성, git 제외)
 │   ├── docs/                    # RAG용 원본 문서 보관
 │   └── prompts/
@@ -67,7 +70,7 @@ pip install -r requirements.txt
 ### 4. 문서 벡터화
 `assets/docs/` 에 `.txt` 또는 `.md` 파일을 넣고 실행:
 ```bash
-python ai/vectorize_docs.py
+python ai/preprocess/vectorize_docs.py
 ```
 
 ### 5. 서버 실행
