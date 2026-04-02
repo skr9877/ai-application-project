@@ -41,6 +41,19 @@ class VectorStore:
         self.collection.add(documents=[text], embeddings=embedding, ids=[filename])
         return True
 
+    def add_chunks(self, filename: str, chunks: list[str]) -> int:
+        # 청크 단위 추가 — 파일명_인덱스를 ID로 사용, 이미 있으면 스킵
+        added = 0
+        for i, chunk in enumerate(chunks):
+            chunk_id = f"{filename}::{i}"
+            existing = self.collection.get(ids=[chunk_id])
+            if existing["ids"]:
+                continue
+            embedding = self.embedder.embed([chunk])
+            self.collection.add(documents=[chunk], embeddings=embedding, ids=[chunk_id])
+            added += 1
+        return added
+
     def search(self, query: str, top_k: int = 3, threshold: float = 0.75) -> list[str]:
         if self.collection.count() == 0:
             return []
